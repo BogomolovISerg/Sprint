@@ -7,9 +7,9 @@ GRANT ALL ON SCHEMA public TO PUBLIC;
 GRANT ALL ON SCHEMA public TO postgres;
 
 CREATE TABLE public.tovar (
-    id BIGSERIAL PRIMARY KEY NOT NULL,
+    id int PRIMARY KEY NOT NULL,
     name VARCHAR(255) NOT NULL,
-    price DECIMAL) NOT NULL;
+    price DECIMAL NOT NULL);
 
 CREATE UNIQUE INDEX products_id_uindex ON public.products (id);
 

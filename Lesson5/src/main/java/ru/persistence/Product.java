@@ -18,20 +18,19 @@ public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
     @Column private String name;
-    @Column private BigDecimal price;
+    @Column private Float price;
 
     public Product() { }
 
-    public Product(Long id, String name, BigDecimal price) {
+    public Product(Integer id, String name, Float price) {
         this.id = id;
         this.name = name;
         this.price = price;
     }
 
-    @Override
     public String toString() {
-        return String.format("Product {id = %-2s | name = %-15s | price = %-8s}", id, name, price);
+        return String.format("Товар id = %-2s | название = %-15s | цена = %-8s", id, name, price);
     }
 }

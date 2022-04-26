@@ -1,7 +1,7 @@
 package ru.controller;
 
-import com.geekbrains.persistence.Cart;
-import ru.service.CartService;
+import ru.persistence.ShoppCars;
+import ru.service.ShoppCarsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,15 +15,15 @@ import java.io.IOException;
 
 @Controller
 @RequestMapping("/cart")
-public class CartController {
+public class CartController{
 
     private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
 
-    private CartService cartService;
-    private Cart cart;
+    private ShoppCarsService cartService;
+    private ShoppCars cart;
 
     @Autowired
-    private void cartController(CartService cartService) {
+    private void cartController(ShoppCarsService cartService) {
         this.cartService = cartService;
         cart = cartService.getNewCart();
     }
@@ -40,7 +40,7 @@ public class CartController {
 
     @GetMapping
     public String cartList (Model model) {
-        model.addAttribute("cartList", cartService.getCartListSorted(cart)); // сортированный список
+        model.addAttribute("cartList", cartService.getCartList(cart));
         model.addAttribute("cartService", cartService);
         model.addAttribute("cart", cart);
         return "cart";
@@ -48,21 +48,11 @@ public class CartController {
 
     @GetMapping("/add/{product_id}")
     public void addToCart (
-            @PathVariable(name = "product_id") Long id,
+            @PathVariable(name = "product_id") Integer id,
             @RequestParam(required = false, name = "q") Integer quantity,
             HttpServletRequest request,
             HttpServletResponse response) throws IOException {
             cartService.addProduct(cart, id, quantity);
             response.sendRedirect(request.getHeader("referer"));
     }
-
-//    @GetMapping("/del/{product_id}")
-//    public void delFromToCart (
-//            @PathVariable(name = "product_id") Long id,
-//            @RequestParam(required = false, name = "q") Integer quantity,
-//            HttpServletRequest request,
-//            HttpServletResponse response) throws IOException {
-//            cartService.addProduct(cart, id, quantity);
-//            response.sendRedirect(request.getHeader("referer"));
-//    }
 }

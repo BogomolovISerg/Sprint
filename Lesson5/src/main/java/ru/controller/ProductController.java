@@ -1,11 +1,11 @@
 package ru.controller;
 
-import com.geekbrains.persistence.entities.Product;
-import ru.service.ProductService;
+import ru.persistence.Product;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import ru.service.ProductService;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,7 +37,7 @@ public class ProductController {
     }
 
     @GetMapping("edit")
-    public String editProduct(@RequestParam(required = false) Long id,
+    public String editProduct(@RequestParam(required = false) Integer id,
                               @RequestParam(required = false) Boolean view,
                               HttpServletRequest request,
                               HttpServletResponse response,
@@ -56,14 +56,14 @@ public class ProductController {
 
     @PostMapping("/edit/save")
     public String mergeProduct(@ModelAttribute Product product) {
-        productService.saveOrUpdate(product);
-        logger.debug("New product created: " + product.toString());
+        productService.addUpdate(product);
+        logger.debug("Товар создан/сохранен: " + product.toString());
         return "redirect:/products";
     }
 
     @GetMapping("/delete")
-    public String deleteProduct(@RequestParam Long id, Model model) {
-        logger.debug("Product deleted: " + productService.getProductById(id).toString());
+    public String deleteProduct(@RequestParam Integer id, Model model) {
+        logger.debug("Товар удален: " + productService.getProductById(id).toString());
         productService.deleteById(id);
         model.addAttribute("productList", productService.getProductList());
         return "redirect:/products";

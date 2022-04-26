@@ -14,26 +14,20 @@ import java.util.List;
 @Repository
 public class ProductRepository{
 
-    private final EntityManager em;
-    public ProductRepositoryImpl(EntityManager em) {
+    private EntityManager em;
+
+    public ProductRepository(EntityManager em) {
         this.em = em;
     }
 
-    public List<Product> findAll() {
+    public List<Product> listAll() {
         em.getTransaction().begin();
         List<Product> list = em.createNamedQuery("Product.findAll", Product.class).getResultList();
         em.getTransaction().commit();
         return list;
     }
 
-    public List<Product> findAllSortedByName() {
-        em.getTransaction().begin();
-        List<Product> list = em.createNamedQuery("Product.findAllSortedByName", Product.class).getResultList();
-        em.getTransaction().commit();
-        return list;
-    }
-
-    public void saveOrUpdate(Product product) {
+    public void addProduct(Product product) {
         em.getTransaction().begin();
         if (product.getId() == null) {
             em.persist(product);
@@ -42,14 +36,14 @@ public class ProductRepository{
         em.getTransaction().commit();
     }
 
-    public Product findById(Long id) {
+    public Product findProduct(Integer id) {
         em.getTransaction().begin();
         Product product = em.find(Product.class, id);
         em.getTransaction().commit();
         return product;
     }
 
-    public void deleteById(Long id) {
+    public void deleteProduct(Integer id) {
         em.getTransaction().begin();
         em.createNamedQuery("Product.deleteById")
                 .setParameter("id", id)

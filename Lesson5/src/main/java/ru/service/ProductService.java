@@ -1,39 +1,35 @@
 package ru.service;
 
-import com.geekbrains.persistence.entities.Product;
-import com.geekbrains.persistence.repositories.ProductRepository;
+import ru.persistence.Product;
+import ru.persistence.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ProductServiceImpl implements ProductService {
+public class ProductService {
 
     private ProductRepository productRepository;
 
     @Autowired
-    public ProductServiceImpl(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
 
-    @Override
     public List<Product> getProductList() {
-        return productRepository.findAllSortedByName();
+        return productRepository.listAll();
     }
 
-    @Override
-    public Product getProductById(Long id) {
-        return productRepository.findById(id);
+     public Product getProductById(Integer id) {
+        return productRepository.findProduct(id);
     }
 
-    @Override
-    public void saveOrUpdate(Product product) {
-        productRepository.saveOrUpdate(product);
+    public void addUpdate(Product product) {
+        productRepository.addProduct(product);
     }
 
-    @Override
-    public void deleteById(Long id) {
-        productRepository.deleteById(id);
+    public void deleteById(Integer id) {
+        productRepository.deleteProduct(id);
     }
 
 }

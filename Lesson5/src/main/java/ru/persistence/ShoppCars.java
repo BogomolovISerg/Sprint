@@ -1,6 +1,5 @@
 package ru.persistence;
 
-import ru.persistence;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -15,12 +14,20 @@ public class ShoppCars {
     private final Map<Product, Integer> cart = new HashMap<>();
 
     public Map<Product, Integer> getCartMap() {
-        return cartMap;
+        return cart;
     }
 
     public void addProduct(Product product, Integer quantity) {
-        if (product != null) cartMap.merge(product, quantity, Integer::sum);
-        if (cartMap.get(product) < 1) cartMap.remove(product);
+        cart.merge(product, quantity, Integer::sum);
+    }
+
+    public void delProduct(Product product, Integer quantity) {
+        if (cart.containsKey(product)) {
+            if (quantity != null && cart.get(product).compareTo(quantity) > 0) {
+                cart.put(product, cart.get(product) - quantity);
+            } else
+                cart.remove(product);
+        }
     }
 
     public float getSumCart() {
