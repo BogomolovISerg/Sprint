@@ -1,6 +1,6 @@
-package com.geekbrains.persistence;
+package ru.persistence;
 
-import com.geekbrains.persistence.entities.Product;
+import ru.persistence;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -10,9 +10,9 @@ import java.util.Map;
 
 @Component
 @Scope("prototype")
-public class Cart {
+public class ShoppCars {
 
-    private final Map<Product, Integer> cartMap = new HashMap<>();
+    private final Map<Product, Integer> cart = new HashMap<>();
 
     public Map<Product, Integer> getCartMap() {
         return cartMap;
@@ -23,10 +23,10 @@ public class Cart {
         if (cartMap.get(product) < 1) cartMap.remove(product);
     }
 
-    public BigDecimal getSum() {
-        BigDecimal sum = BigDecimal.valueOf(0);
-        for (Map.Entry<Product, Integer> entry : cartMap.entrySet()) {
-            sum = sum.add(entry.getKey().getPrice().multiply(BigDecimal.valueOf(entry.getValue())));
+    public float getSumCart() {
+        float sum = 0.0f;
+        for (Map.Entry<Product, Integer> entry : cart.entrySet()) {
+            sum += entry.getKey().getPrice();
         }
         return sum;
     }

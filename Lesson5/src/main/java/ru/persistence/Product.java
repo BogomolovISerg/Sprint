@@ -1,4 +1,4 @@
-package com.geekbrains.persistence.entities;
+package ru.persistence;
 
 import lombok.Data;
 import javax.persistence.*;
