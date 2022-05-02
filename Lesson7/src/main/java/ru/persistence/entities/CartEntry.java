@@ -3,6 +3,7 @@ package ru.persistence.entities;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.sql.Date;
 
 @Data
 @Entity
@@ -14,7 +15,7 @@ public class CartEntry {
     @Column (name = "id")
     private Integer id;
 
-    @OneToMany
+    @ManyToOne
     @JoinColumn (name = "products_id")
     private Product product;
 
@@ -25,7 +26,7 @@ public class CartEntry {
     private String nomer_order;
 
     @Column (name = "data_order")
-    private Data data_order;
+    private Date data_order;
 
     public String toString() {
         return String.format("\nCartEntry {order_id = %s, product_id = %s, количество = %s, номер = %s, дата = %s}",

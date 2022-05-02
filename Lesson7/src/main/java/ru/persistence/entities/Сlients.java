@@ -10,7 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "clients")
-public class Сlients {
+public class Сlients{
 
     public Сlients(String name) {
         this.name = name;
@@ -24,7 +24,7 @@ public class Сlients {
     @Column (name = "name")
     private String name;
 
-    @OneToMany(mappedBy="clients", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Orders> orders;
 
     public String toString() {

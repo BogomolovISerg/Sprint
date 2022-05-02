@@ -2,19 +2,20 @@ package ru.persistence.entities;
 
 import lombok.Data;
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Data
 @Entity
 @Table(name = "products")
 @NamedQueries({
-        @NamedQuery(name = "Product.findAll", query = "FROM products p"),
-        @NamedQuery(name = "Product.findAllSortedByName", query = "FROM products p ORDER BY p.name"),
-        @NamedQuery(name = "Product.findById", query = "FROM products p WHERE p.id = :id"),
-        @NamedQuery(name = "Product.deleteById", query = "DELETE FROM products p WHERE p.id = :id")
+        @NamedQuery(name = "Product.findAll", query = "FROM Product p"),
+        @NamedQuery(name = "Product.findAllSortedByName", query = "FROM Product p ORDER BY p.name"),
+        @NamedQuery(name = "Product.findById", query = "FROM Product p WHERE p.id = :id"),
+        @NamedQuery(name = "Product.deleteById", query = "DELETE FROM Product p WHERE p.id = :id")
 })
 
-public class Product{
+public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,16 +26,16 @@ public class Product{
     private String name;
 
     @Column(name = "price")
-    private float price;
+    private Float price;
 
-    @OneToMany
+    @ManyToMany
     @JoinTable(
-            name = "order_products",
+            name = "orders",
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "id"))
     private List<Orders> orders;
 
-    @OneToMany(mappedBy = "products")
+    @OneToMany(mappedBy = "product")
     private List<CartEntry> cartEntries;
 
     public Product() { }
@@ -46,6 +47,6 @@ public class Product{
     }
 
     public String toString() {
-        return String.format("Product id = %s, name = %s, price = %s", id, name, price);
+        return String.format("Товар id = %s, наименование = %s, цена = %s", id, name, price);
     }
 }
