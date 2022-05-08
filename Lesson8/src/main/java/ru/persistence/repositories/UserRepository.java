@@ -1,7 +1,7 @@
-package ru.configurations.persistence.repositories;
+package ru.persistence.repositories;
 
-import ru.configurations.persistence.entities.User;
+import ru.persistence.entities.Clients;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<Clients, Integer> {
 }

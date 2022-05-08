@@ -1,6 +1,7 @@
 package ru.controller;
 
 import ru.persistence.ShoppCars;
+import ru.service.ShoppCarsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,11 +15,11 @@ import java.io.IOException;
 @RequestMapping("/cart")
 public class CartController {
 
-    private CartService cartService;
+    private ShoppCarsService cartService;
     private ShoppCars cart;
 
     @Autowired
-    private void cartController(CartService cartService) {
+    private void cartController(ShoppCarsService cartService) {
         this.cartService = cartService;
         cart = cartService.getNewCart();
     }
@@ -35,7 +36,7 @@ public class CartController {
 
     @GetMapping
     public String cartList (Model model) {
-        model.addAttribute("cartList", cartService.getCartListSorted(cart)); // сортированный список
+        model.addAttribute("cartList", cartService.getCartList(cart));
         model.addAttribute("cartService", cartService);
         model.addAttribute("cart", cart);
         return "cart";
@@ -43,21 +44,11 @@ public class CartController {
 
     @GetMapping("/add/{product_id}")
     public void addToCart (
-            @PathVariable(name = "product_id") Long id,
+            @PathVariable(name = "product_id") Integer id,
             @RequestParam(required = false, name = "q") Integer quantity,
             HttpServletRequest request,
             HttpServletResponse response) throws IOException {
             cartService.addProduct(cart, id, quantity);
             response.sendRedirect(request.getHeader("referer"));
     }
-
-//    @GetMapping("/del/{product_id}")
-//    public void delFromToCart (
-//            @PathVariable(name = "product_id") Long id,
-//            @RequestParam(required = false, name = "q") Integer quantity,
-//            HttpServletRequest request,
-//            HttpServletResponse response) throws IOException {
-//            cartService.addProduct(cart, id, quantity);
-//            response.sendRedirect(request.getHeader("referer"));
-//    }
 }

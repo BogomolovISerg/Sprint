@@ -12,19 +12,15 @@
     <div class="container">
         <div class="row py-2">
 
-            <!--фильтрация через POST-запрос-->
-            <!--<form id="productListForm" th:action="@{/products/filter}" th:object="${productFilter}" method="post">-->
-            <!--фильтрация через GET-запрос-->
             <form id="productListForm" th:action="@{/products}" th:object="${productFilter}" method="get">
-                <!-- фильтр -->
                 <div class="row g-3 p-2 d-flex justify-content-center">
                     <div class="form-group col-auto">
-                        <label for="minPrice">Min Price</label>
+                        <label for="minPrice">Минимальнвя цена</label>
                         <input type="number" class="form-control" id="minPrice" name="minPrice" placeholder="min"
                                th:field="*{minPrice}">
                     </div>
                     <div class="form-group col-auto">
-                        <label for="maxPrice">Max Price</label>
+                        <label for="maxPrice">Максимальная цена</label>
                         <input type="number" class="form-control" id="maxPrice" name="mapPrice" placeholder="max"
                                th:field="*{maxPrice}">
                     </div>

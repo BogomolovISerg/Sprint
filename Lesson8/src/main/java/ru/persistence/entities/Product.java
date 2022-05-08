@@ -2,7 +2,6 @@ package ru.persistence.entities;
 
 import lombok.Data;
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.util.List;
 
 @Data
@@ -20,27 +19,27 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    private Integer id;
 
     @Column(name = "name")
     private String name;
 
     @Column(name = "price")
-    private BigDecimal price;
+    private Float price;
 
     @ManyToMany
     @JoinTable(
-            name = "order_products",
+            name = "orders",
             joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "order_id"))
-    private List<Order> orders;
+            inverseJoinColumns = @JoinColumn(name = "id"))
+    private List<Orders> orders;
 
     @OneToMany(mappedBy = "product")
     private List<CartEntry> cartEntries;
 
     public Product() { }
 
-    public Product(Long id, String name, BigDecimal price) {
+    public Product(Integer id, String name, Float price) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -48,19 +47,6 @@ public class Product {
 
     @Override
     public String toString() {
-        return String.format("Product id = %s, name = %s, price = %s", id, name, price);
+        return String.format("Товар id = %s, наименование = %s, цена = %s", id, name, price);
     }
-
-    /*@Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Product product = (Product) o;
-        return id.equals(product.id) && name.equals(product.name) && price.equals(product.price);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, price);
-    }*/
 }

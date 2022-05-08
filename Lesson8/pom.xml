@@ -9,12 +9,19 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>ru</groupId>
-    <artifactId>Thymeleaf</artifactId>
+    <artifactId>Lesson8</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>Thymeleaf</name>
     <description>Demo project for Spring Thymeleaf</description>
     <properties>
         <java.version>11</java.version>
+    </properties>
+    <properties>
+        <java.version>11</java.version>
+        <deploy.jboss.host>127.0.0.1</deploy.jboss.host>
+        <deploy.jboss.port>9990</deploy.jboss.port>
+        <deploy.jboss.username>serg</deploy.jboss.username>
+        <deploy.jboss.password>1qaz2wsX</deploy.jboss.password>
     </properties>
     <dependencies>
         <dependency>
@@ -42,7 +49,6 @@
             <artifactId>springfox-boot-starter</artifactId>
             <version>3.0.0</version>
         </dependency>
-
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -53,11 +59,15 @@
             <artifactId>h2</artifactId>
             <scope>runtime</scope>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.25</version>
         </dependency>
     </dependencies>
 
@@ -73,6 +83,26 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.wildfly.plugins</groupId>
+                <artifactId>wildfly-maven-plugin</artifactId>
+                <version>2.0.2.Final</version>
+                <executions>
+                    <execution>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>deploy</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <filename>${project.build.finalName}.war</filename>
+                    <hostname>${deploy.jboss.host}</hostname>
+                    <port>${deploy.jboss.port}</port>
+                    <username>${deploy.jboss.username}</username>
+                    <password>${deploy.jboss.password}</password>
                 </configuration>
             </plugin>
         </plugins>

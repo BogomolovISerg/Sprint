@@ -9,26 +9,26 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "users")
-public class User {
+@Table(name = "clients")
+public class Clients {
 
-    public User(String name) {
+    public Clients(String name) {
         this.name = name;
     }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column (name = "id")
-    private Long id;
+    private Integer id;
 
     @Column (name = "name")
     private String name;
 
     @OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Order> orders;
+    private List<Orders> orders;
 
     @Override
     public String toString() {
-        return String.format("User id = %s, name = %s", id, name);
+        return String.format("Клиент id = %s, наименование = %s", id, name);
     }
 }

@@ -1,6 +1,7 @@
 package ru.controller;
 
-import ru.configurations.persistence.entities.Product;
+import ru.persistence.entities.Product;
+import ru.service.ProductService;
 import ru.utils.ProductFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.List;
 
 @Controller
@@ -37,21 +37,17 @@ public class ProductController {
     @GetMapping({"", "/{pageIndex}"})
     public String showAll(Model model,
                           @PathVariable(required = false) Integer pageIndex,
-                          @RequestParam(defaultValue = "0") BigDecimal minPrice,
-                          @RequestParam(defaultValue = "1000000") BigDecimal maxPrice,
+                          @RequestParam(defaultValue = "0") Float minPrice,
+                          @RequestParam(defaultValue = "1000000") Float maxPrice,
                           @RequestParam(defaultValue = "") String partName,
                           @RequestParam(defaultValue = "5") Integer productsPerPage) {
 
 
         model.addAttribute("productFilter", new ProductFilter(minPrice, maxPrice, partName));
 
-        // если minPrice меньше 0
-        if (minPrice.compareTo(BigDecimal.ZERO) < 0) minPrice = BigDecimal.ZERO;
-        // если maxPrice больше 1000000
-        if (maxPrice.compareTo(BigDecimal.valueOf(1000000)) > 0 ) maxPrice = BigDecimal.valueOf(1000000);
-        // если не указан номер страницы, то показываем 1-ю страницу с дефолтными значениями
+        if (minPrice < 0F) minPrice = 0F;
+        if (maxPrice > 1000000F) maxPrice = 1000000F;
         if (pageIndex == null) pageIndex = 1;
-        // если номер страницы = 0, то выводим весь список товаров (только в учебных целях)
         if (pageIndex == 0) {
             List<Product> productsPlain = productService.getProductList();
             model.addAttribute("productList", productsPlain);
@@ -69,7 +65,7 @@ public class ProductController {
     }
 
     @GetMapping("edit")
-    public String editProduct(@RequestParam(required = false) Long id,
+    public String editProduct(@RequestParam(required = false) Integer id,
                               @RequestParam(required = false) Boolean view,
                               HttpServletRequest request,
                               Model model) {
@@ -87,15 +83,15 @@ public class ProductController {
 
     @PostMapping("/edit/save")
     public String mergeProduct(@ModelAttribute Product product) {
-        productService.saveOrUpdate(product);
+        productService.addUpdate(product);
         return "redirect:/products";
     }
 
     @GetMapping("/delete")
-    public void deleteProduct(@RequestParam Long id, Model model,
+    public void deleteProduct(@RequestParam Integer id, Model model,
                                 HttpServletRequest request,
                                 HttpServletResponse response) throws IOException {
-        logger.debug("Product deleted: " + productService.getProductById(id).toString());
+        logger.debug("Товар удален: " + productService.getProductById(id).toString());
         productService.deleteById(id);
         model.addAttribute("productList", productService.getProductList());
         response.sendRedirect(request.getHeader("referer"));
@@ -103,17 +99,12 @@ public class ProductController {
 
     @PostMapping("/filter")
     public String setFilter(@ModelAttribute("productFilter") ProductFilter productFilter, Model model) {
-
-//        String resp = request.getHeader("referer");
         String resp = "redirect:/products/1";
         resp = resp + "?minPrice=";
-        if (productFilter.getMinPrice() != null) resp = resp + productFilter.getMinPrice(); // без проверки - NumberFormatException
+        if (productFilter.getMinPrice() != null) resp = resp + productFilter.getMinPrice();
         resp = resp + "&maxPrice=";
-        if (productFilter.getMaxPrice() != null) resp = resp + productFilter.getMaxPrice(); // без проверки - NumberFormatException
+        if (productFilter.getMaxPrice() != null) resp = resp + productFilter.getMaxPrice();
         resp = resp + "&partName=" + productFilter.getPartName();
-
         return resp;
     }
-
-
 }

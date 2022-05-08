@@ -1,22 +1,20 @@
 package ru.persistence.repositories;
 
-import ru.configurations.persistence.entities.Product;
+import ru.persistence.entities.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Repository
-public interface ProductRepository extends JpaRepository<Product, Long> {
+public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     List<Product> findProductByName(String name);
-    List<Product> findProductByPriceBetween(BigDecimal minPrice, BigDecimal maxPrice);
-    List<Product> findProductByPriceLessThan(BigDecimal maxPrice);
-    List<Product> findProductByPriceGreaterThan(BigDecimal minPrice);
+    List<Product> findProductByPriceBetween(Float minPrice, Float maxPrice);
+    List<Product> findProductByPriceLessThan(Float maxPrice);
+    List<Product> findProductByPriceGreaterThan(Float minPrice);
 
-    // @Query(SELECT p FROM Product p WHERE (p.price BETWEEN ?1 AND ?2) AND p.name=?3 LIMIT ?4 OFFSET ?5) // запрос не проверен!
-    Page<Product> findProductsByPriceBetweenAndNameLike(BigDecimal minPrice, BigDecimal maxPrice, String partName, Pageable varPageSort);
+    Page<Product> findProductsByPriceBetweenAndNameLike(Float minPrice, Float maxPrice, String partName, Pageable varPageSort);
 }
